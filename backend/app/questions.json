@@ -1,0 +1,30 @@
+[
+  {
+    "question": "What is the warranty period for the Atlas-7 robot arm?",
+    "answer_contains": "24 months"
+  },
+  {
+    "question": "Which safety certification does the Atlas-7 hold for working next to people?",
+    "answer_contains": "ISO 10218"
+  },
+  {
+    "question": "How much can the Atlas-7 gripper lift at full extension?",
+    "answer_contains": "12 kg"
+  },
+  {
+    "question": "Who leads the Berlin engineering team that handles EU escalations?",
+    "answer_contains": "Lena Vogt"
+  },
+  {
+    "question": "What maintenance interval is recommended for the Atlas-7 in continuous operation?",
+    "answer_contains": "500 hours"
+  },
+  {
+    "question": "What is the part number for the Atlas-7 replacement wrist servo?",
+    "answer_contains": "SV-4420"
+  },
+  {
+    "question": "When does the summer support window close each year?",
+    "answer_contains": "August"
+  }
+]
