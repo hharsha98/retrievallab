@@ -33,6 +33,10 @@ app = FastAPI(title="RetrievalLab API", version="0.1.0", lifespan=lifespan, **_d
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.frontend_origin],
+    # In prod, accept any Cloudflare Pages URL for this project (production +
+    # preview deploys) so a hostname suffix can't break CORS — the lesson from
+    # CareerAgent's config-drift bug. Synthetic-corpus demo, so this is safe.
+    allow_origin_regex=r"https://.*retrievallab.*\.pages\.dev" if settings.env == "prod" else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

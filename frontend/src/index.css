@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+
+/* RetrievalLab — same design language as the portfolio / CareerAgent. */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+
+  --color-ink: #09090b;
+  --color-panel: #101012;
+  --color-edge: #26262b;
+  --color-accent: #34d399;    /* emerald — advanced path */
+  --color-cyan2: #22d3ee;     /* cyan — retrieval */
+}
+
+:root { color-scheme: dark; }
+body { @apply bg-ink text-zinc-300 antialiased; }
+
+.atmosphere {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, rgb(52 211 153 / 0.07), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 100%, rgb(34 211 238 / 0.05), transparent 70%);
+}
+
+.glow-hover { transition: box-shadow 0.3s, transform 0.3s; }
+.glow-hover:hover { box-shadow: 0 0 0 1px rgb(52 211 153 / 0.25), 0 10px 50px -12px rgb(52 211 153 / 0.5); transform: translateY(-2px); }
+
+::selection { background: rgb(52 211 153 / 0.25); }
