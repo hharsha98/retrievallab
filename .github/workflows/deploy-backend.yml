@@ -1,0 +1,23 @@
+# Auto-deploy the backend to the HF Space on push to main (backend/ changes).
+# Needs one repo secret: HF_TOKEN (a HF write token) — Settings → Secrets → Actions.
+name: Deploy backend to HF Space
+
+on:
+  push:
+    branches: [main]
+    paths: ['backend/**']
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Push backend/ to the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          pip -q install "huggingface_hub[cli]"
+          hf upload hv1998/retrievallab-api backend . --repo-type space --token "$HF_TOKEN" \
+            --exclude "venv/**" --exclude "__pycache__/**" --exclude ".env" --exclude "dev_reseed.py" \
+            --commit-message "deploy ${GITHUB_SHA::7}"

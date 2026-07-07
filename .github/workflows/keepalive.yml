@@ -1,0 +1,17 @@
+# Keep the free HF Space warm (sleeps after ~48h idle) — ping every 6h.
+# No secrets needed. For bulletproof always-on, also add UptimeRobot (5-min pings).
+name: Keep-alive
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health + touch the DB
+        run: |
+          curl -sf https://hv1998-retrievallab-api.hf.space/api/health
+          curl -sf https://hv1998-retrievallab-api.hf.space/api/documents > /dev/null
