@@ -1,9 +1,11 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
 
 /* RetrievalLab — dark lab chrome: hairline panels, emerald/cyan retrieval palette. */
 @theme {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", "Times New Roman", serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
 
   --color-ink: #07070a;
@@ -21,20 +23,31 @@ body { @apply bg-ink text-zinc-300 antialiased; }
 
 .atmosphere {
   background:
-    radial-gradient(ellipse 50% 36% at 18% -8%, rgb(52 211 153 / 0.09), transparent 62%),
-    radial-gradient(ellipse 42% 32% at 88% 108%, rgb(34 211 238 / 0.06), transparent 64%);
+    radial-gradient(ellipse 50% 36% at 18% -8%, rgb(52 211 153 / 0.11), transparent 62%),
+    radial-gradient(ellipse 42% 32% at 88% 108%, rgb(34 211 238 / 0.08), transparent 64%),
+    radial-gradient(ellipse 30% 24% at 70% 20%, rgb(52 211 153 / 0.05), transparent 70%);
 }
 
 .atmosphere-grid {
   background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 20%, black, transparent 78%);
+}
+
+.atmosphere-dots {
+  background-image: radial-gradient(rgb(255 255 255 / 0.22) 0.7px, transparent 0.7px);
+  background-size: 22px 22px;
+  opacity: 0.18;
 }
 
 .kicker {
   @apply font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-accent;
+}
+
+.display {
+  @apply font-display font-normal tracking-tight;
 }
 
 .panel {
@@ -52,6 +65,12 @@ body { @apply bg-ink text-zinc-300 antialiased; }
 .btn-secondary {
   @apply inline-flex items-center justify-center rounded-full border border-edge bg-transparent px-5 py-2.5 text-sm text-zinc-300 transition
          hover:border-zinc-500 hover:text-zinc-100
+         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50;
+}
+
+.btn-ghost-link {
+  @apply text-sm font-medium text-zinc-400 underline decoration-zinc-700 underline-offset-4 transition
+         hover:text-zinc-100 hover:decoration-zinc-400
          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50;
 }
 

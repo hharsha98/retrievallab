@@ -1,7 +1,7 @@
 /** Landing — product chrome for the advanced-RAG lab. */
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import RetrievalFlow from '../components/RetrievalFlow'
+import HeroStage from '../components/HeroStage'
 import { LandingNav } from '../components/LandingNav'
 import { LogoMark } from '../components/Logo'
 
@@ -22,13 +22,6 @@ const LADDER = [
   { n: '05', title: 'Retrieval evaluation', body: 'recall@k and MRR, naive vs advanced. If you are not measuring, you are guessing.', tone: 'text-rose-400 border-rose-400/25 bg-rose-400/8' },
 ]
 
-const SURFACES = [
-  { to: '/inspector', kicker: 'Inspector', title: 'Watch a query flow', body: 'HyDE probe, hybrid candidates with vector vs keyword rank, then rerank promotions — live.' },
-  { to: '/compare', kicker: 'Compare', title: 'Naive vs advanced', body: 'Same question, two answers. Vector-only on the left; hybrid + rerank on the right.' },
-  { to: '/eval', kicker: 'Eval', title: 'Measure the delta', body: 'Hand-labelled recall@k and MRR on the demo corpus. Advanced 100% vs naive 86%.' },
-  { to: '/docs', kicker: 'Docs', title: 'See the corpus', body: 'Chunks stored with situating context and dual embeddings. Upload a PDF to try ingest.' },
-]
-
 const STATS = [
   { n: '5', label: 'pipeline stages you can watch' },
   { n: '100%', label: 'advanced recall on the demo set' },
@@ -40,11 +33,16 @@ const STATS = [
 export default function Landing() {
   return (
     <div className="min-h-dvh atmosphere">
-      <div className="atmosphere-grid pointer-events-none fixed inset-0 -z-10" />
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute -top-32 left-1/4 h-[32rem] w-[32rem] rounded-full bg-accent/10 blur-[120px]" />
+        <div className="absolute top-1/3 right-0 h-[28rem] w-[28rem] rounded-full bg-cyan-400/10 blur-[120px]" />
+        <div className="atmosphere-grid absolute inset-0" />
+        <div className="atmosphere-dots absolute inset-0" />
+      </div>
       <LandingNav />
 
-      <div className="relative mx-auto max-w-6xl px-5 pt-16 pb-20 sm:px-6 sm:pt-24">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_auto] lg:gap-16">
+      <section className="relative mx-auto flex min-h-[calc(100dvh-4rem)] max-w-6xl items-center px-5 py-16 sm:px-6 lg:py-20">
+        <div className="grid w-full items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:gap-16">
           <div>
             <motion.div {...rise(0)} className="flex flex-wrap items-center gap-2">
               <span className="chip">ADVANCED RAG · INSTRUMENTED</span>
@@ -53,88 +51,137 @@ export default function Landing() {
                 demo corpus live
               </span>
             </motion.div>
-            <motion.h1 {...rise(1)} className="mt-6 text-4xl font-semibold leading-[1.05] tracking-tight text-zinc-50 sm:text-6xl">
+            <motion.h1 {...rise(1)} className="display mt-6 text-4xl leading-[1.12] text-zinc-50 sm:text-5xl lg:text-6xl">
               Retrieval you can
-              <span className="mt-1 block bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">watch, and measure.</span>
+              <span className="mt-1 block bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">watch, and measure.</span>
             </motion.h1>
-            <motion.p {...rise(2)} className="mt-5 max-w-xl text-lg text-zinc-400">
-              The techniques 2026 job posts actually ask for — contextual chunking,
-              hybrid search, cross-encoder reranking, query transformation — in one
-              pipeline, with citations.
+            <motion.p {...rise(2)} className="mt-5 max-w-md text-base leading-relaxed text-zinc-400 sm:text-lg">
+              Contextual chunking, hybrid search, cross-encoder reranking, and query
+              transformation — in one pipeline, with citations.
             </motion.p>
-            <motion.div {...rise(3)} className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.div {...rise(3)} className="mt-8 flex flex-wrap items-center gap-5">
               <Link to="/inspector" className="btn-primary">Open the Inspector</Link>
-              <Link to="/eval" className="btn-secondary">See the eval</Link>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.35, duration: 0.5 }}
-              className="mt-10 rounded-xl border border-edge bg-black/25 p-3 md:hidden"
-            >
-              <RetrievalFlow />
+              <Link to="/eval" className="btn-ghost-link">See the eval</Link>
             </motion.div>
           </div>
           <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.35, duration: 0.55 }}
-            className="hidden rounded-xl border border-edge bg-black/25 p-4 md:block"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28, duration: 0.55 }}
+            className="lg:justify-self-end"
           >
-            <RetrievalFlow />
+            <HeroStage />
           </motion.div>
         </div>
+      </section>
 
-        <div className="mt-20 border-y border-edge/80">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-8 py-8 sm:grid-cols-3 lg:grid-cols-5">
-            {STATS.map((s) => (
-              <div key={s.label} className="flex flex-col gap-1">
-                <span className="font-mono text-2xl font-medium tracking-tight text-zinc-50 sm:text-3xl">{s.n}</span>
-                <span className="text-xs leading-snug text-zinc-500">{s.label}</span>
-              </div>
-            ))}
-          </div>
+      <div className="border-y border-edge/80">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-5 py-10 sm:grid-cols-3 sm:px-6 lg:grid-cols-5">
+          {STATS.map((s) => (
+            <div key={s.label} className="flex flex-col gap-1">
+              <span className="font-mono text-2xl font-medium tracking-tight text-zinc-50 sm:text-3xl">{s.n}</span>
+              <span className="text-xs leading-snug text-zinc-500">{s.label}</span>
+            </div>
+          ))}
         </div>
+      </div>
 
-        <section className="mt-24">
+      <div className="relative mx-auto max-w-6xl px-5 py-24 sm:px-6">
+        <section>
           <p className="kicker text-cyan-400">The advanced-RAG ladder</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">Five upgrades that separate a demo from production.</h2>
+          <h2 className="display mt-3 text-3xl text-zinc-50 sm:text-4xl">Five upgrades that separate a demo from production.</h2>
           <p className="mt-3 max-w-2xl text-zinc-500">Naive RAG (chunk → embed → top-k cosine) is the right start and the wrong finish. Each rung is independently inspectable.</p>
-          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {LADDER.map((step, i) => (
               <motion.div
                 key={step.title}
                 {...inView}
-                className={`rounded-xl border border-edge bg-panel p-5 ${i === 4 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
+                className={`rounded-xl border border-edge bg-panel p-6 ${i === 4 ? 'sm:col-span-2 lg:col-span-1' : ''}`}
               >
-                <span className={`inline-flex h-8 w-8 items-center justify-center rounded-lg border font-mono text-xs ${step.tone}`}>{step.n}</span>
-                <h3 className="mt-3 text-base font-medium tracking-tight text-zinc-100">{step.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">{step.body}</p>
+                <span className={`inline-flex h-9 w-9 items-center justify-center rounded-lg border font-mono text-xs ${step.tone}`}>{step.n}</span>
+                <h3 className="mt-4 text-base font-medium tracking-tight text-zinc-100">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-400">{step.body}</p>
               </motion.div>
             ))}
           </div>
         </section>
 
-        <section className="mt-24">
+        <section className="mt-28">
           <p className="kicker text-emerald-400">Workbench</p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-zinc-50 sm:text-4xl">Four surfaces. Same pipeline.</h2>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2">
-            {SURFACES.map((s) => (
-              <Link
-                key={s.to}
-                to={s.to}
-                className="group relative flex flex-col gap-2 rounded-xl border border-edge bg-panel p-6 transition hover:bg-white/[0.02]"
-              >
-                <span className="absolute right-5 top-5 text-zinc-600 opacity-0 transition group-hover:opacity-100">→</span>
-                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">{s.kicker}</span>
-                <h3 className="text-lg font-medium tracking-tight text-zinc-100">{s.title}</h3>
-                <p className="text-sm leading-relaxed text-zinc-400">{s.body}</p>
-              </Link>
-            ))}
+          <h2 className="display mt-3 text-3xl text-zinc-50 sm:text-4xl">Four surfaces. Same pipeline.</h2>
+          <p className="mt-3 max-w-2xl text-zinc-500">Ask, compare, measure, inspect the corpus — without leaving the lab.</p>
+          <div className="mt-10 grid gap-4 lg:grid-cols-2">
+            <Link to="/inspector" className="group relative flex flex-col justify-between gap-6 rounded-xl border border-edge bg-panel p-6 transition hover:bg-white/[0.02]">
+              <span className="absolute right-5 top-5 text-zinc-600 opacity-0 transition group-hover:opacity-100">→</span>
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">Inspector</span>
+                <h3 className="mt-2 text-lg font-medium tracking-tight text-zinc-100">Watch a query flow</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">HyDE probe, hybrid candidates, then rerank promotions — live.</p>
+              </div>
+              <div className="space-y-2 rounded-lg border border-edge bg-black/30 p-3">
+                <div className="flex gap-1.5 font-mono text-[10px] text-zinc-500">
+                  <span className="rounded border border-edge px-1.5 py-0.5">HyDE</span>
+                  <span className="rounded border border-emerald-400/30 bg-emerald-400/10 px-1.5 py-0.5 text-emerald-300">hybrid #11 → #1</span>
+                </div>
+                <p className="text-xs text-zinc-400">ISO 13482 for working next to people…</p>
+              </div>
+            </Link>
+            <Link to="/compare" className="group relative flex flex-col justify-between gap-6 rounded-xl border border-edge bg-panel p-6 transition hover:bg-white/[0.02]">
+              <span className="absolute right-5 top-5 text-zinc-600 opacity-0 transition group-hover:opacity-100">→</span>
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">Compare</span>
+                <h3 className="mt-2 text-lg font-medium tracking-tight text-zinc-100">Naive vs advanced</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">Same question, two answers. Vector-only on the left; hybrid + rerank on the right.</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2 rounded-lg border border-edge bg-black/30 p-3">
+                <div className="rounded-md border border-edge p-2">
+                  <p className="font-mono text-[9px] uppercase text-zinc-600">naive</p>
+                  <div className="mt-2 space-y-1"><div className="h-1.5 w-full rounded bg-white/10" /><div className="h-1.5 w-2/3 rounded bg-white/10" /></div>
+                </div>
+                <div className="rounded-md border border-emerald-400/30 bg-emerald-400/[0.06] p-2">
+                  <p className="font-mono text-[9px] uppercase text-accent">advanced</p>
+                  <div className="mt-2 space-y-1"><div className="h-1.5 w-full rounded bg-accent/40" /><div className="h-1.5 w-3/4 rounded bg-accent/25" /></div>
+                </div>
+              </div>
+            </Link>
+            <Link to="/eval" className="group relative flex flex-col justify-between gap-6 rounded-xl border border-edge bg-panel p-6 transition hover:bg-white/[0.02]">
+              <span className="absolute right-5 top-5 text-zinc-600 opacity-0 transition group-hover:opacity-100">→</span>
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">Eval</span>
+                <h3 className="mt-2 text-lg font-medium tracking-tight text-zinc-100">Measure the delta</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">Hand-labelled recall@k and MRR on the demo corpus.</p>
+              </div>
+              <div className="flex items-end gap-3 rounded-lg border border-edge bg-black/30 px-3 py-3">
+                <div className="flex flex-col items-center gap-1">
+                  <div className="h-10 w-8 rounded-t bg-zinc-600/80" />
+                  <span className="font-mono text-[9px] text-zinc-500">86%</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="h-14 w-8 rounded-t bg-accent" />
+                  <span className="font-mono text-[9px] text-accent">100%</span>
+                </div>
+                <span className="mb-1 ml-auto font-mono text-[10px] text-zinc-500">recall@k</span>
+              </div>
+            </Link>
+            <Link to="/docs" className="group relative flex flex-col justify-between gap-6 rounded-xl border border-edge bg-panel p-6 transition hover:bg-white/[0.02]">
+              <span className="absolute right-5 top-5 text-zinc-600 opacity-0 transition group-hover:opacity-100">→</span>
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-zinc-500">Docs</span>
+                <h3 className="mt-2 text-lg font-medium tracking-tight text-zinc-100">See the corpus</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-400">Chunks with situating context and dual embeddings. Upload a PDF to try ingest.</p>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border border-edge bg-black/30 px-3 py-2.5">
+                <span className="flex items-center gap-2 text-xs text-zinc-300">
+                  <span className="rounded border border-edge px-1.5 py-0.5 font-mono text-[9px] text-cyan-400">PDF</span>
+                  atlas-7-handbook.pdf
+                </span>
+                <span className="font-mono text-[10px] text-zinc-500">19 chunks</span>
+              </div>
+            </Link>
           </div>
         </section>
 
-        <section className="mt-24 border-y border-edge/80 py-8">
+        <section className="mt-28 border-y border-edge/80 py-10">
           <p className="text-center font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-600">Stack</p>
           <div className="mt-4 flex flex-wrap items-center justify-center gap-x-8 gap-y-2 font-mono text-xs text-zinc-500">
             {['FastAPI', 'pgvector', 'Mistral embeddings', 'Groq', 'FlashRank', 'React', 'Vite', 'Cloudflare Pages'].map((t) => (
@@ -144,11 +191,11 @@ export default function Landing() {
         </section>
 
         <section className="mt-16">
-          <div className="relative overflow-hidden rounded-xl border border-edge px-8 py-14 text-center">
+          <div className="relative overflow-hidden rounded-2xl border border-edge px-8 py-16 text-center">
             <div aria-hidden className="pointer-events-none absolute -bottom-24 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
             <div className="relative flex flex-col items-center gap-5">
-              <LogoMark className="h-12 w-12" />
-              <h2 className="text-2xl font-semibold tracking-tight text-zinc-50 sm:text-3xl">Ask the handbook. Watch the ranks move.</h2>
+              <LogoMark className="h-14 w-14" />
+              <h2 className="display text-3xl text-zinc-50 sm:text-4xl">Ask the handbook. Watch the ranks move.</h2>
               <p className="max-w-md text-sm text-zinc-500">No account. Demo corpus is seeded. Open the Inspector and run an example question.</p>
               <Link to="/inspector" className="btn-primary">Open the Inspector →</Link>
             </div>

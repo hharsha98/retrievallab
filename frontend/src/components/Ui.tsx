@@ -12,7 +12,7 @@ export function PageHeader({
   return (
     <header className="max-w-2xl">
       <p className="kicker text-zinc-500">{kicker}</p>
-      <h1 className="mt-2 text-[1.65rem] font-semibold tracking-tight text-zinc-50 sm:text-3xl">{title}</h1>
+      <h1 className="display mt-2 text-[1.7rem] text-zinc-50 sm:text-3xl">{title}</h1>
       {lede && <div className="mt-2 text-sm leading-relaxed text-zinc-500">{lede}</div>}
     </header>
   )

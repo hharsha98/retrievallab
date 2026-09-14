@@ -9,9 +9,9 @@ const CANDIDATES = [
 ]
 const PROMOTED_Y = [66, 96, 126]
 
-export default function RetrievalFlow() {
+export default function RetrievalFlow({ className = 'w-full max-w-lg' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 560 210" className="w-full max-w-lg" role="img"
+    <svg viewBox="0 0 560 210" className={className} role="img"
       aria-label="Animated retrieval pipeline: query, hybrid retrieval, reranking, answer">
       <defs>
         <linearGradient id="rf-line" x1="0" x2="1">

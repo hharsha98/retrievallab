@@ -15,6 +15,10 @@ export default function Shell() {
   const status = useApiStatus()
   return (
     <div className="min-h-dvh atmosphere flex flex-col md:flex-row">
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+        <div className="absolute -top-24 left-[18%] h-80 w-80 rounded-full bg-accent/10 blur-[100px]" />
+        <div className="atmosphere-dots absolute inset-0 opacity-20" />
+      </div>
       <aside className="shrink-0 border-b border-edge/80 bg-ink/60 px-3 py-2 backdrop-blur-md
                         md:flex md:w-56 md:flex-col md:items-stretch md:border-b-0 md:border-r md:px-4 md:py-6">
         <div className="flex items-center gap-3 overflow-x-auto md:flex-col md:items-stretch md:overflow-visible">
