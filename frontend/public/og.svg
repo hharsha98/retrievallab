@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#07070a"/>
+  <circle cx="220" cy="-40" r="320" fill="#34d399" fill-opacity="0.07"/>
+  <circle cx="1080" cy="700" r="360" fill="#22d3ee" fill-opacity="0.06"/>
+  <g transform="translate(88 168) scale(6.2)">
+    <defs>
+      <linearGradient id="og-ring" x1="6" y1="4" x2="42" y2="44">
+        <stop stop-color="#34d399"/>
+        <stop offset="1" stop-color="#22d3ee"/>
+      </linearGradient>
+      <linearGradient id="og-hit" x1="16" y1="18" x2="34" y2="30">
+        <stop stop-color="#34d399"/>
+        <stop offset="1" stop-color="#6ee7b7"/>
+      </linearGradient>
+    </defs>
+    <circle cx="24" cy="24" r="18.75" stroke="url(#og-ring)" stroke-width="2.25"/>
+    <rect x="13" y="14.5" width="16" height="6.2" rx="1.6" fill="#07070a" stroke="#34d399" stroke-width="1.35"/>
+    <rect x="19" y="27.2" width="15" height="5.8" rx="1.5" fill="#07070a" stroke="#22d3ee" stroke-width="1.35"/>
+    <rect x="16" y="19.6" width="18.5" height="7.4" rx="1.8" fill="url(#og-hit)"/>
+    <rect x="19.2" y="22.1" width="8" height="1.35" rx="0.65" fill="#052e1c" opacity="0.45"/>
+    <rect x="19.2" y="24.4" width="5" height="1.35" rx="0.65" fill="#052e1c" opacity="0.28"/>
+  </g>
+  <text x="430" y="278" fill="#fafafa" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="72" font-weight="600" letter-spacing="-1.5">Retrieval</text>
+  <text x="778" y="278" fill="#34d399" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="72" font-weight="600" letter-spacing="-1.5">Lab</text>
+  <text x="430" y="338" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="28">Advanced RAG, made visible.</text>
+  <text x="430" y="430" fill="#52525b" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" letter-spacing="3">QUERY · HYBRID · RERANK · GROUNDED ANSWER</text>
+</svg>
