@@ -66,6 +66,14 @@ export default function Landing() {
               <Link to="/inspector" className="btn-primary">Open the Inspector</Link>
               <Link to="/eval" className="btn-secondary">See the eval</Link>
             </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.35, duration: 0.5 }}
+              className="mt-10 rounded-xl border border-edge bg-black/25 p-3 md:hidden"
+            >
+              <RetrievalFlow />
+            </motion.div>
           </div>
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}

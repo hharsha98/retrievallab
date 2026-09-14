@@ -11,6 +11,22 @@ const links = [
   { to: '/docs', label: 'Docs' },
 ]
 
+function NavItems({ className }: { className?: string }) {
+  return (
+    <nav className={className}>
+      {links.map((l) => (
+        <NavLink
+          key={l.to}
+          to={l.to}
+          className="shrink-0 rounded-md px-3 py-1.5 text-sm text-zinc-400 transition hover:bg-white/[0.03] hover:text-zinc-100"
+        >
+          {l.label}
+        </NavLink>
+      ))}
+    </nav>
+  )
+}
+
 export function LandingNav() {
   const status = useApiStatus()
   const uid = useId()
@@ -21,17 +37,7 @@ export function LandingNav() {
           <span id={uid} className="sr-only">RetrievalLab home</span>
           <Brand compact />
         </Link>
-        <nav className="ml-auto hidden items-center gap-1 md:flex">
-          {links.map((l) => (
-            <NavLink
-              key={l.to}
-              to={l.to}
-              className="rounded-md px-3 py-1.5 text-sm text-zinc-400 transition hover:bg-white/[0.03] hover:text-zinc-100"
-            >
-              {l.label}
-            </NavLink>
-          ))}
-        </nav>
+        <NavItems className="ml-auto hidden items-center gap-1 md:flex" />
         <div className="ml-auto flex items-center gap-3 md:ml-3">
           <StatusDot status={status} />
           <a
@@ -44,6 +50,7 @@ export function LandingNav() {
           </a>
         </div>
       </div>
+      <NavItems className="flex gap-1 overflow-x-auto border-t border-edge/70 px-3 py-1 md:hidden" />
     </header>
   )
 }
