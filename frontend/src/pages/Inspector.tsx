@@ -2,8 +2,11 @@
  *  every stage: query → transformation → hybrid retrieve → rerank → answer.
  *  The rerank stage visibly shows each chunk's hybrid rank moving to its new one. */
 import { useState } from 'react'
+import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { api, type Candidate, type QueryTrace } from '../lib/api'
+import { Answer, EmptyState, ErrorNote, PageHeader, QueryBar } from '../components/Ui'
 
 const EXAMPLES = [
   'What certification does the Atlas-7 hold?',
@@ -11,26 +14,20 @@ const EXAMPLES = [
   'How long is the warranty and what does it cover?',
 ]
 
-/** highlight [n] citation markers in the answer text */
-function Answer({ text }: { text: string }) {
-  return (
-    <p className="text-sm leading-relaxed text-zinc-200">
-      {text.split(/(\[\d+\])/g).map((p, i) =>
-        /^\[\d+\]$/.test(p)
-          ? <span key={i} className="mx-0.5 rounded bg-emerald-400/15 px-1.5 font-mono text-[11px] text-accent">{p}</span>
-          : <span key={i}>{p}</span>)}
-    </p>
-  )
-}
+const PIPELINE = ['HyDE', 'hybrid', 'rerank', 'answer']
 
-function Stage({ n, kicker, children }: { n: number; kicker: string; children: React.ReactNode }) {
+function Stage({ n, kicker, children }: { n: number; kicker: string; children: ReactNode }) {
   return (
     <motion.section
       initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.12 * n, duration: 0.4 }}
-      className="rounded-xl border border-edge bg-panel p-5">
+      className="panel p-5"
+    >
       <h3 className="mb-3 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
-        <span className="text-accent">{String(n + 1).padStart(2, '0')}</span>{kicker}
+        <span className="inline-flex h-5 w-5 items-center justify-center rounded border border-emerald-400/25 bg-emerald-400/10 text-[10px] text-accent">
+          {String(n + 1).padStart(2, '0')}
+        </span>
+        {kicker}
       </h3>
       {children}
     </motion.section>
@@ -40,8 +37,8 @@ function Stage({ n, kicker, children }: { n: number; kicker: string; children: R
 function CandidateRow({ c, showRerank }: { c: Candidate; showRerank?: boolean }) {
   const moved = showRerank && c.hybrid_rank != null && c.new_rank != null ? c.hybrid_rank - c.new_rank : 0
   return (
-    <div className="rounded-md border border-edge bg-ink/60 px-3 py-2">
-      <div className="mb-1 flex flex-wrap items-center gap-2 font-mono text-[10px]">
+    <div className="rounded-lg border border-edge bg-ink/60 px-3 py-2.5">
+      <div className="mb-1.5 flex flex-wrap items-center gap-2 font-mono text-[10px]">
         {showRerank && c.hybrid_rank != null && (
           <span className={`rounded px-1.5 py-0.5 ${moved > 0 ? 'bg-emerald-400/15 text-emerald-300' : moved < 0 ? 'bg-rose-400/15 text-rose-300' : 'bg-zinc-700/40 text-zinc-400'}`}>
             hybrid #{c.hybrid_rank + 1} → #{(c.new_rank ?? 0) + 1} {moved > 0 ? `↑${moved}` : moved < 0 ? `↓${-moved}` : ''}
@@ -74,27 +71,62 @@ export default function Inspector() {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <p className="font-mono text-xs uppercase tracking-[0.25em] text-zinc-500">pipeline inspector</p>
-      <h2 className="mt-1 text-2xl font-semibold text-zinc-100">Watch a query flow through the pipeline.</h2>
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">
+      <PageHeader
+        kicker="pipeline inspector"
+        title="Watch a query flow through the pipeline."
+        lede="HyDE, hybrid retrieval, cross-encoder rerank, then a grounded answer with citations — each stage stays on screen."
+      />
 
-      <form onSubmit={(e) => { e.preventDefault(); run(q) }} className="mt-6 flex gap-2">
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask the robot handbook…" disabled={busy}
-          className="flex-1 rounded-md border border-edge bg-panel px-4 py-2.5 text-sm text-zinc-100 outline-none placeholder:text-zinc-600 focus:border-accent/60" />
-        <button disabled={busy || !q.trim()} className="rounded-md bg-accent px-5 text-sm font-medium text-zinc-950 transition enabled:hover:brightness-110 disabled:opacity-40">
-          {busy ? 'Running…' : 'Run'}
-        </button>
-      </form>
+      <QueryBar
+        value={q}
+        onChange={setQ}
+        onSubmit={() => run(q)}
+        busy={busy}
+        placeholder="Ask the robot handbook…"
+        action="Run"
+      />
+
       {!trace && !busy && (
         <div className="mt-3 flex flex-wrap gap-2">
           {EXAMPLES.map((ex) => (
-            <button key={ex} onClick={() => { setQ(ex); run(ex) }}
-              className="rounded-full border border-edge bg-panel px-3 py-1 text-xs text-zinc-400 transition hover:border-accent/50">{ex}</button>
+            <button
+              key={ex}
+              type="button"
+              onClick={() => { setQ(ex); run(ex) }}
+              className="rounded-full border border-edge bg-panel px-3 py-1 text-xs text-zinc-400 transition hover:border-accent/50 hover:text-zinc-200"
+            >
+              {ex}
+            </button>
           ))}
         </div>
       )}
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
-      {busy && <p className="mt-6 font-mono text-sm text-zinc-500">running HyDE → hybrid → rerank → answer…</p>}
+      <ErrorNote message={error} />
+
+      {busy && (
+        <div className="panel mt-8 px-5 py-6">
+          <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-zinc-500">running pipeline</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {PIPELINE.map((step) => (
+              <span
+                key={step}
+                className="inline-flex items-center gap-2 rounded-full border border-edge bg-raised px-3 py-1 font-mono text-[11px] text-zinc-400"
+              >
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
+                {step}
+              </span>
+            ))}
+          </div>
+          <p className="mt-4 text-sm text-zinc-500">HyDE → hybrid retrieve → rerank → answer. First run may wake the reranker.</p>
+        </div>
+      )}
+
+      {!trace && !busy && !error && (
+        <EmptyState
+          title="Nothing running yet"
+          body="Pick an example, or type a question about certifications, part numbers, or warranty coverage in the demo handbook."
+        />
+      )}
 
       <AnimatePresence>
         {trace && (
@@ -105,7 +137,7 @@ export default function Inspector() {
 
             <Stage n={1} kicker="query transformation">
               <p className="text-[11px] font-mono uppercase tracking-widest text-cyan-400">HyDE probe (embedded for search)</p>
-              <p className="mt-1 rounded-md border border-edge bg-ink/60 px-3 py-2 text-[13px] italic text-zinc-400">{trace.hyde}</p>
+              <p className="mt-1 rounded-lg border border-edge bg-ink/60 px-3 py-2 text-[13px] italic text-zinc-400">{trace.hyde}</p>
               {trace.sub_queries.length > 1 && (
                 <>
                   <p className="mt-3 text-[11px] font-mono uppercase tracking-widest text-zinc-500">decomposed into</p>
@@ -131,7 +163,9 @@ export default function Inspector() {
 
             <Stage n={4} kicker="grounded answer">
               <Answer text={trace.advanced_answer} />
-              <p className="mt-3 font-mono text-[11px] text-zinc-600">pipeline took {trace.elapsed_ms} ms · <a className="text-accent" href="/compare">compare vs naive →</a></p>
+              <p className="mt-3 font-mono text-[11px] text-zinc-600">
+                pipeline took {trace.elapsed_ms} ms · <Link className="text-accent hover:underline" to="/compare">compare vs naive →</Link>
+              </p>
             </Stage>
           </div>
         )}

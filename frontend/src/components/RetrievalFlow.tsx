@@ -26,7 +26,7 @@ export default function RetrievalFlow() {
       </defs>
       {[['query', 40], ['hybrid retrieve', 200], ['rerank', 360], ['answer', 490]].map(([label, x]) => (
         <text key={label as string} x={x as number} y={16} textAnchor="middle"
-          className="fill-zinc-600 font-mono" fontSize="9" letterSpacing="1.5">{(label as string).toUpperCase()}</text>
+          className="fill-zinc-500 font-mono" fontSize="9" letterSpacing="1.5">{(label as string).toUpperCase()}</text>
       ))}
       <motion.g animate={{ opacity: [0.4, 1, 1, 1, 0.4], scale: [0.96, 1, 1, 1, 0.96] }}
         transition={{ duration: LOOP, times: [0, 0.1, 0.5, 0.9, 1], repeat: Infinity }}
